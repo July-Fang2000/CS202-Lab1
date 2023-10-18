@@ -97,3 +97,23 @@ uint64 sys_hello(void) // hello syscall definition
   print_hello(n);
   return 0;
 }
+
+uint64 sys_sysinfo(void) 
+{
+  int param;
+  argint(0, &param);
+  if (param == 0) {
+    return number_of_process();
+  } else if (param == 1) {
+    return total_syscalls_made-1;
+  }
+  else if (param == 2)
+  {
+    return count_free_pages();
+  }
+  else
+  {
+    return -1;
+  }
+  return 0;
+}

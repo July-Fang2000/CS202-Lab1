@@ -687,3 +687,16 @@ void print_hello(int n)
 {
   printf("Hello from the kernel space %d\n", n);
 }
+
+int number_of_process(void)
+{
+  int count = 0;
+  struct proc *p;
+  
+  for (p = proc; p < &proc[NPROC]; p++) {
+    if (p->state != UNUSED) {
+      count++;
+    }
+  }
+  return count;
+}
