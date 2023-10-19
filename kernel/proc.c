@@ -124,6 +124,8 @@ allocproc(void)
 found:
   p->pid = allocpid();
   p->state = USED;
+  p->syscall_count = 0;
+  p->page_usage = 0;
 
   // Allocate a trapframe page.
   if((p->trapframe = (struct trapframe *)kalloc()) == 0){
@@ -692,7 +694,7 @@ int number_of_process(void)
 {
   int count = 0;
   struct proc *p;
-  
+
   for (p = proc; p < &proc[NPROC]; p++) {
     if (p->state != UNUSED) {
       count++;

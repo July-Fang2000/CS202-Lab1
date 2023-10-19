@@ -105,6 +105,7 @@ extern uint64 sys_mkdir(void);
 extern uint64 sys_close(void);
 extern uint64 sys_hello(void);  // hello: declaration
 extern uint64 sys_sysinfo(void);
+extern uint64 sys_procinfo(void);
 
 // An array mapping syscall numbers from syscall.h
 // to the function that handles the system call.
@@ -132,6 +133,7 @@ static uint64 (*syscalls[])(void) = {
 [SYS_close]   sys_close,
 [SYS_hello]   sys_hello, // hello: syscall entry
 [SYS_sysinfo] sys_sysinfo,
+[SYS_procinfo] sys_procinfo,
 };
 
 void
@@ -147,6 +149,9 @@ syscall(void)
   }
 
   if(num > 0 && num < NELEM(syscalls) && syscalls[num]) {
+    if (num != SYS_sysinfo) {
+      p->syscall_count++;
+    }
     // Use num to lookup the system call function for num, call it,
     // and store its return value in p->trapframe->a0
     p->trapframe->a0 = syscalls[num]();

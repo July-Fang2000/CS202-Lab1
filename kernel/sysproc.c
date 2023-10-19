@@ -117,3 +117,22 @@ uint64 sys_sysinfo(void)
   }
   return 0;
 }
+
+uint64 sys_procinfo(void) {
+
+  struct pinfo p;
+  struct proc *proc = myproc();
+  uint64 ptr;
+  argaddr(0, &ptr);
+
+  p.ppid = proc->parent->pid;
+  p.syscall_count = proc->syscall_count - 1;
+  p.page_usage = (proc->sz + 4096 - 1) / 4096;
+
+  if (copyout(proc->pagetable, ptr, (char *)&p, sizeof(struct pinfo))) {
+    return 0;
+  }
+
+  else
+    return -1;
+}
